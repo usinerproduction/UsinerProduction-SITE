@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TRIPS - UsinerProduction</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #080808;
+      --bg2: #0f0f0f;
+      --accent: #e8e0d5;
+      --accent2: #a89880;
+      --text: #EFEFEF;
+      --muted: #5a5a5a;
+      --border: #1c1c1c;
+      --gold: #a89880;
+      --gold-dim: #6e6054;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.4rem 4rem;
+      background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+      transition: background 0.3s;
+    }
+    nav.scrolled { background: rgba(10,10,10,0.97); border-bottom: 1px solid var(--border); }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+    }
+    .nav-logo-text {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.12em;
+      color: var(--text);
+    }
+
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-links a.active { color: var(--gold); }
+
+    .burger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 200;
+    }
+    .burger span {
+      display: block;
+      width: 22px;
+      height: 1.5px;
+      background: var(--text);
+      transition: transform 0.3s, opacity 0.3s;
+      transform-origin: center;
+    }
+    .burger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .burger.open span:nth-child(2) { opacity: 0; }
+    .burger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    @media (max-width: 768px) {
+      .burger { display: flex; }
+      .nav-links {
+        position: fixed;
+        top: 0; right: -100%;
+        width: 65vw; height: 100vh;
+        background: rgba(8,8,18,0.97);
+        backdrop-filter: blur(12px);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2.5rem;
+        transition: right 0.4s cubic-bezier(0.16,1,0.3,1);
+        border-left: 1px solid var(--border);
+        z-index: 150;
+      }
+      .nav-links.open { right: 0; }
+      .nav-links a { font-size: 0.9rem; letter-spacing: 0.25em; }
+    }
+
+    /* ── HEADER ── */
+    .page-header {
+      height: 70vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 2rem;
+      position: relative;
+      overflow: hidden;
+      background: #080812;
+      margin-top: 80px;
+    }
+
+    .header-bg-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 55% 90% at 50% -10%, rgba(220,232,255,0.42) 0%, rgba(190,210,255,0.18) 35%, transparent 68%),
+        radial-gradient(ellipse 85% 65% at 50% 15%, rgba(160,180,230,0.18) 0%, transparent 65%),
+        linear-gradient(180deg, #080812 0%, #0c0b14 50%, #080810 100%);
+      z-index: 0;
+    }
+    .page-header > *:not(.header-bg-overlay) { position: relative; z-index: 1; }
+
+    .header-eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.3s;
+    }
+
+    .header-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 10vw, 9rem);
+      line-height: 0.9;
+      letter-spacing: 0.02em;
+      color: var(--text);
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.5s;
+    }
+    .header-title .gold { color: var(--gold); }
+
+    .header-sub {
+      margin-top: 2rem;
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 480px;
+      line-height: 1.7;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.7s;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── GLOBE CONTAINER ── */
+    .globe-section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 2rem;
+      background: #07070a;
+      border-top: 1px solid var(--border);
+    }
+
+    .globe-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      letter-spacing: 0.03em;
+      line-height: 1;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .globe-container {
+      width: 100%;
+      max-width: 600px;
+      height: 600px;
+      position: relative;
+      margin-bottom: 3rem;
+    }
+
+    #globe {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      box-shadow: 0 0 80px rgba(168, 152, 128, 0.2);
+    }
+
+    .globe-hint {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-align: center;
+      letter-spacing: 0.1em;
+      margin-top: 1.5rem;
+    }
+
+    /* ── VIDEO GALLERY ── */
+    .videos-section {
+      width: 100%;
+      padding: 4rem 2rem;
+      background: #0f0f0f;
+    }
+
+    .videos-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      letter-spacing: 0.03em;
+      margin-bottom: 3rem;
+      text-align: center;
+    }
+
+    .videos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .video-card {
+      background: #1a1a1a;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s;
+      cursor: pointer;
+    }
+    .video-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--gold);
+    }
+
+    .video-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #0a0a0a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: var(--muted);
+    }
+
+    .video-info {
+      padding: 1.5rem;
+    }
+
+    .video-country {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .video-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.8rem;
+      color: var(--text);
+    }
+
+    .video-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── MODAL ── */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.95);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      background: #1a1a1a;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 2rem;
+      cursor: pointer;
+      z-index: 1001;
+      transition: color 0.2s;
+    }
+    .modal-close:hover { color: var(--gold); }
+
+    .modal-header {
+      padding: 2rem 2rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-country {
+      font-size: 0.8rem;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .modal-body {
+      padding: 2rem;
+    }
+
+    .modal-video {
+      width: 100%;
+      aspect-ratio: 16/9;
+      margin-bottom: 1.5rem;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .modal-video iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .modal-desc {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 3rem 4rem;
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .footer-left { display: flex; flex-direction: column; gap: 0.8rem; }
+    .footer-logo-wrap { display: flex; align-items: center; gap: 0.8rem; }
+    .footer-text-logo { height: 22px; width: auto; object-fit: contain; filter: brightness(0) invert(1); opacity: 0.7; }
+    .footer-phrase { font-size: 0.65rem; color: var(--muted); font-style: italic; letter-spacing: 0.08em; }
+    .footer-center { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; text-align: center; }
+    .footer-location { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; }
+    .footer-mail { font-size: 0.75rem; color: var(--muted); text-decoration: none; letter-spacing: 0.05em; transition: color 0.2s; }
+    .footer-mail:hover { color: var(--text); }
+    .footer-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; }
+    .footer-insta { font-size: 0.75rem; color: var(--muted); text-decoration: none; letter-spacing: 0.08em; transition: color 0.2s; }
+    .footer-insta:hover { color: var(--text); }
+    .footer-copy { font-size: 0.62rem; color: #333; letter-spacing: 0.08em; }
+
+    @media (max-width: 1024px) {
+      nav { padding: 1.2rem 2rem; }
+      .globe-container { height: 500px; max-width: 500px; }
+      footer { gap: 2rem; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.2rem; }
+      .page-header { margin-top: 60px; }
+      .globe-container { height: 400px; max-width: 400px; }
+      .videos-grid { grid-template-columns: 1fr; }
+      .modal-content { max-width: 90vw; }
+      footer { grid-template-columns: 1fr; text-align: center; padding: 2.5rem 1.2rem; }
+    }
+
+    @media (max-width: 380px) {
+      .globe-container { height: 300px; max-width: 300px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="index.HTML" class="nav-logo" style="text-decoration:none;color:var(--text);">
+      <span class="nav-logo-text">UsinerProduction</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.HTML#services" onclick="closeMenu()">Services</a></li>
+      <li><a href="index.HTML#portfolio" onclick="closeMenu()">Portfolio</a></li>
+      <li><a href="trips.html" onclick="closeMenu()" style="color:var(--gold);">Trips</a></li>
+    </ul>
+    <button class="burger" id="burger" onclick="toggleMenu()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- HEADER -->
+  <section class="page-header">
+    <div class="header-bg-overlay"></div>
+    <p class="header-eyebrow">Voyages & Aventures</p>
+    <h1 class="header-title">EXPLOREZ MON MONDE<br><span class="gold">À 360°</span></h1>
+    <p class="header-sub">Une carte interactive de mes destinations de rêve et des histoires vidéo que j'y ai capturées.</p>
+  </section>
+
+  <!-- GLOBE SECTION -->
+  <section class="globe-section">
+    <h2 class="globe-title">PARCOUREZ LE MONDE</h2>
+    <div class="globe-container">
+      <canvas id="globe"></canvas>
+    </div>
+    <p class="globe-hint">💡 Cliquez sur les pays colorés · Faites glisser pour faire tourner</p>
+  </section>
+
+  <!-- VIDEOS SECTION -->
+  <section class="videos-section">
+    <h2 class="videos-title">VIDÉOS PAR DESTINATION</h2>
+    <div class="videos-grid" id="videosGrid">
+      <!-- Videos will be inserted here by JavaScript -->
+    </div>
+  </section>
+
+  <!-- MODAL -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTitle">Titre</h2>
+        <p class="modal-country" id="modalCountry">PAYS</p>
+      </div>
+      <div class="modal-body">
+        <div class="modal-video" id="modalVideo"></div>
+        <p class="modal-desc" id="modalDesc">Description</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-left">
+      <p class="footer-phrase">Je capture l'instant, je crée l'émotion</p>
+    </div>
+    <div class="footer-center">
+      <p class="footer-location">Marne & Ardennes · France</p>
+      <a href="mailto:usinerproduction@gmail.com" class="footer-mail">usinerproduction@gmail.com</a>
+    </div>
+    <div class="footer-right">
+      <a href="https://instagram.com/UsinerProduction" target="_blank" class="footer-insta">@UsinerProduction</a>
+      <p class="footer-copy">© 2025 UsinerProduction</p>
+    </div>
+  </footer>
+
+  <!-- Three.js for 3D Globe -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  
+  <script>
+    // ──── DONNÉES DES VIDÉOS ────
+    const tripsData = [
+      {
+        id: 1,
+        country: "Japon",
+        latitude: 36.2048,
+        longitude: 138.2529,
+        title: "Nuit de Tokyo",
+        description: "Une plongée dans les néons et l'énergie de la capitale nippone.",
+        youtubeId: "grszAOYAauM", // Replace avec vos vraies vidéos
+        emoji: "🇯🇵"
+      },
+      {
+        id: 2,
+        country: "Thaïlande",
+        latitude: 15.8700,
+        longitude: 100.9925,
+        title: "Temples Dorés",
+        description: "Les temples bouddhistes majestueux de Bangkok et Chiang Mai.",
+        youtubeId: "grszAOYAauM",
+        emoji: "🇹🇭"
+      },
+      {
+        id: 3,
+        country: "Pérou",
+        latitude: -12.0464,
+        longitude: -77.0428,
+        title: "Chemin vers Machu Picchu",
+        description: "Une ascension mystique à travers les montagnes des Andes.",
+        youtubeId: "grszAOYAauM",
+        emoji: "🇵🇪"
+      },
+      {
+        id: 4,
+        country: "Norvège",
+        latitude: 60.0,
+        longitude: 10.0,
+        title: "Aurores Boréales",
+        description: "Le spectacle magique du ciel nocturne arctique.",
+        youtubeId: "grszAOYAauM",
+        emoji: "🇳🇴"
+      },
+      {
+        id: 5,
+        country: "Nouvelle-Zélande",
+        latitude: -40.9006,
+        longitude: 174.8860,
+        title: "Lord of the Rings Lands",
+        description: "Les paysages épiques qui ont inspiré la trilogie.",
+        youtubeId: "grszAOYAauM",
+        emoji: "🇳🇿"
+      },
+      {
+        id: 6,
+        country: "Mexique",
+        latitude: 19.4326,
+        longitude: -99.1332,
+        title: "Riviera Sauvage",
+        description: "Cenotes secrets et plages de rêve du Yucatán.",
+        youtubeId: "grszAOYAauM",
+        emoji: "🇲🇽"
+      }
+    ];
+
+    // ──── THREE.JS GLOBE ────
+    let scene, camera, renderer, globe, markers = [];
+    let isDragging = false;
+    let previousMousePosition = { x: 0, y: 0 };
+
+    function initGlobe() {
+      const canvas = document.getElementById('globe');
+      const width = canvas.parentElement.clientWidth;
+      const height = canvas.parentElement.clientHeight;
+
+      // Scene setup
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer.setSize(width, height);
+      renderer.setClearColor(0x080812, 1);
+
+      camera.position.z = 2.5;
+
+      // Globe (sphere)
+      const geometry = new THREE.SphereGeometry(1, 64, 64);
+      
+      // Canvas texture pour la surface du globe
+      const canvas2d = document.createElement('canvas');
+      canvas2d.width = 2048;
+      canvas2d.height = 1024;
+      const ctx = canvas2d.getContext('2d');
+      
+      // Fond sombre avec dégradé
+      const gradient = ctx.createLinearGradient(0, 0, canvas2d.width, canvas2d.height);
+      gradient.addColorStop(0, '#1a1a2e');
+      gradient.addColorStop(0.5, '#16213e');
+      gradient.addColorStop(1, '#0f3460');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas2d.width, canvas2d.height);
+
+      // Continents (zones highlightées)
+      ctx.fillStyle = 'rgba(168, 152, 128, 0.3)';
+      
+      // Zones approximatives des continents
+      const continents = [
+        { x: 700, y: 300, w: 300, h: 200 }, // Asie
+        { x: 100, y: 250, w: 200, h: 150 }, // Europe
+        { x: 200, y: 550, w: 150, h: 200 }, // Afrique
+        { x: 50, y: 550, w: 120, h: 200 },  // Amérique
+        { x: 1300, y: 400, w: 300, h: 200 } // Océanie
+      ];
+      
+      continents.forEach(c => {
+        ctx.fillRect(c.x, c.y, c.w, c.h);
+      });
+
+      const texture = new THREE.CanvasTexture(canvas2d);
+      const material = new THREE.MeshPhongMaterial({
+        map: texture,
+        shininess: 10,
+        wireframe: false
+      });
+
+      globe = new THREE.Mesh(geometry, material);
+      scene.add(globe);
+
+      // Lighting
+      const light = new THREE.DirectionalLight(0xffffff, 0.8);
+      light.position.set(5, 3, 5);
+      scene.add(light);
+
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+      scene.add(ambientLight);
+
+      // Markers pour les pays
+      createMarkers();
+
+      // Mouse events
+      canvas.addEventListener('mousedown', onMouseDown, false);
+      canvas.addEventListener('mousemove', onMouseMove, false);
+      canvas.addEventListener('mouseup', onMouseUp, false);
+      canvas.addEventListener('touchstart', onTouchStart, false);
+      canvas.addEventListener('touchmove', onTouchMove, false);
+      canvas.addEventListener('touchend', onTouchEnd, false);
+
+      // Click detection
+      canvas.addEventListener('click', onCanvasClick);
+
+      // Animation loop
+      animate();
+
+      // Responsive
+      window.addEventListener('resize', onWindowResize);
+    }
+
+    function createMarkers() {
+      tripsData.forEach(trip => {
+        // Convertir lat/long en position 3D
+        const lat = trip.latitude * Math.PI / 180;
+        const lon = trip.longitude * Math.PI / 180;
+
+        const x = Math.cos(lat) * Math.cos(lon);
+        const y = Math.sin(lat);
+        const z = Math.cos(lat) * Math.sin(lon);
+
+        // Créer un petit cube comme marqueur
+        const markerGeometry = new THREE.SphereGeometry(0.08, 16, 16);
+        const markerMaterial = new THREE.MeshBasicMaterial({
+          color: 0xa89880,
+          emissive: 0xa89880,
+          emissiveIntensity: 0.7
+        });
+
+        const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+        marker.position.set(x, y, z);
+        marker.userData = trip;
+
+        globe.add(marker);
+        markers.push(marker);
+      });
+    }
+
+    function onMouseDown(e) {
+      isDragging = true;
+      previousMousePosition = { x: e.clientX, y: e.clientY };
+    }
+
+    function onMouseMove(e) {
+      if (isDragging) {
+        const deltaX = e.clientX - previousMousePosition.x;
+        const deltaY = e.clientY - previousMousePosition.y;
+
+        globe.rotation.y += deltaX * 0.01;
+        globe.rotation.x += deltaY * 0.01;
+
+        previousMousePosition = { x: e.clientX, y: e.clientY };
+      }
+    }
+
+    function onMouseUp() {
+      isDragging = false;
+    }
+
+    function onTouchStart(e) {
+      isDragging = true;
+      previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+
+    function onTouchMove(e) {
+      if (isDragging) {
+        const deltaX = e.touches[0].clientX - previousMousePosition.x;
+        const deltaY = e.touches[0].clientY - previousMousePosition.y;
+
+        globe.rotation.y += deltaX * 0.01;
+        globe.rotation.x += deltaY * 0.01;
+
+        previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      }
+    }
+
+    function onTouchEnd() {
+      isDragging = false;
+    }
+
+    function onCanvasClick(event) {
+      const canvas = document.getElementById('globe');
+      const rect = canvas.getBoundingClientRect();
+      const mouse = new THREE.Vector2();
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      const raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera(mouse, camera);
+
+      const intersects = raycaster.intersectObjects(markers);
+      if (intersects.length > 0) {
+        const trip = intersects[0].object.userData;
+        openVideoModal(trip);
+      }
+    }
+
+    function onWindowResize() {
+      const canvas = document.getElementById('globe');
+      const width = canvas.parentElement.clientWidth;
+      const height = canvas.parentElement.clientHeight;
+
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // Rotation douce
+      if (!isDragging) {
+        globe.rotation.y += 0.0002;
+      }
+
+      // Animation des marqueurs
+      markers.forEach(marker => {
+        marker.scale.x = 1 + Math.sin(Date.now() * 0.003) * 0.2;
+        marker.scale.y = marker.scale.x;
+        marker.scale.z = marker.scale.x;
+      });
+
+      renderer.render(scene, camera);
+    }
+
+    // ──── VIDEO GRID ────
+    function renderVideosGrid() {
+      const grid = document.getElementById('videosGrid');
+      grid.innerHTML = '';
+
+      tripsData.forEach(trip => {
+        const card = document.createElement('div');
+        card.className = 'video-card';
+        card.onclick = () => openVideoModal(trip);
+        
+        card.innerHTML = `
+          <div class="video-thumb">${trip.emoji}</div>
+          <div class="video-info">
+            <div class="video-country">${trip.country}</div>
+            <h3 class="video-title">${trip.title}</h3>
+            <p class="video-desc">${trip.description}</p>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    // ──── MODAL ────
+    function openVideoModal(trip) {
+      document.getElementById('modalTitle').textContent = trip.title;
+      document.getElementById('modalCountry').textContent = trip.country;
+      document.getElementById('modalDesc').textContent = trip.description;
+      
+      const videoContainer = document.getElementById('modalVideo');
+      videoContainer.innerHTML = `
+        <iframe 
+          src="https://www.youtube.com/embed/${trip.youtubeId}?rel=0&modestbranding=1&color=white"
+          title="${trip.title}"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      `;
+
+      document.getElementById('modal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove('active');
+    }
+
+    // ──── NAV FUNCTIONS ────
+    function toggleMenu() {
+      document.getElementById('navLinks').classList.toggle('open');
+      document.getElementById('burger').classList.toggle('open');
+    }
+
+    function closeMenu() {
+      document.getElementById('navLinks').classList.remove('open');
+      document.getElementById('burger').classList.remove('open');
+    }
+
+    // ──── NAV SCROLL ────
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // ──── INIT ────
+    window.addEventListener('load', () => {
+      initGlobe();
+      renderVideosGrid();
+    });
+
+    // Close modal on outside click
+    document.getElementById('modal').addEventListener('click', (e) => {
+      if (e.target.id === 'modal') closeModal();
+    });
+  </script>
+
+</body>
+</html>

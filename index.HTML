@@ -297,27 +297,7 @@
     }
     .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
 
-    .scroll-indicator {
-      position: absolute;
-      bottom: 2.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      opacity: 0;
-      animation: fadeUp 0.8s ease forwards 1.6s;
-    }
-    .scroll-line {
-      width: 40px; height: 1px;
-      background: var(--gold);
-      animation: scrollPulse 2s ease-in-out infinite;
-    }
-    @keyframes scrollPulse {
-      0%,100% { width: 40px; opacity: 1; }
-      50% { width: 60px; opacity: 0.5; }
-    }
-    .scroll-text { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); }
+
 
     @keyframes slideUp {
       to { opacity: 1; transform: translateY(0); }
@@ -481,6 +461,8 @@
       overflow: hidden;
       cursor: pointer;
     }
+    .pi-thumb.pi-video { cursor: default; }
+    .pi-thumb.pi-video::after { display: none; }
     .pi-thumb {
       width: 100%;
       aspect-ratio: 16/9;
@@ -526,81 +508,6 @@
       color: var(--text);
       line-height: 1;
     }
-
-    /* ── CONTACT ── */
-    #contact { background: #09090c; border-top: 1px solid var(--border); }
-
-    .contact-layout {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6rem;
-      align-items: start;
-    }
-
-    .contact-info p {
-      color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.8;
-      margin-bottom: 2.5rem;
-      max-width: 380px;
-    }
-
-    .contact-detail {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-bottom: 2.5rem;
-    }
-    .contact-detail-item {
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-    }
-    .contact-detail-label {
-      font-size: 0.6rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--gold);
-    }
-    .contact-detail-value {
-      font-size: 0.9rem;
-      color: var(--text);
-    }
-
-    .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
-
-    .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
-    .form-label { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); }
-
-    .form-input, .form-textarea {
-      background: #0f0f0f;
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-size: 0.9rem;
-      padding: 0.9rem 1rem;
-      outline: none;
-      transition: border-color 0.2s;
-      resize: none;
-    }
-    .form-input:focus, .form-textarea:focus { border-color: var(--gold); }
-    .form-textarea { min-height: 130px; }
-
-    .form-submit {
-      padding: 0.9rem 2rem;
-      background: var(--accent);
-      color: #080808;
-      border: none;
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: 'Inter', sans-serif;
-      align-self: flex-start;
-      transition: background 0.2s, transform 0.2s;
-    }
-    .form-submit:hover { background: #fff; transform: translateY(-2px); }
 
     /* ── FOOTER ── */
     footer {
@@ -739,7 +646,7 @@
     <ul class="nav-links" id="navLinks">
       <li><a href="#services" onclick="closeMenu()">Services</a></li>
       <li><a href="#portfolio" onclick="closeMenu()">Portfolio</a></li>
-      <li><a href="contact.html" onclick="closeMenu()">Contact</a></li>
+      
     </ul>
     <button class="burger" id="burger" onclick="toggleMenu()" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -757,12 +664,9 @@
     <p class="hero-sub">Chaque moment mérite d'être filmé avec intention. Je capture vos histoires et les transforme en visuels qui marquent.</p>
     <div class="hero-cta">
       <a href="#portfolio" class="btn-primary">Voir le travail</a>
-      <a href="contact.html" class="btn-ghost">Démarrer un projet</a>
+      <a href="#contact" class="btn-ghost">Démarrer un projet</a>
     </div>
-    <div class="scroll-indicator">
-      <div class="scroll-line"></div>
-      <span class="scroll-text">Scroll</span>
-    </div>
+
   </section>
 
   <!-- SERVICES -->
@@ -812,10 +716,19 @@
       </div>
       <div class="portfolio-grid">
         <div class="portfolio-item pi-large">
-          <div class="pi-thumb" style="background:linear-gradient(135deg,#0f0a08 0%,#1a1008 50%,#0a0808 100%);"></div>
-          <div class="portfolio-overlay">
+          <div class="pi-thumb pi-video" style="background:#000;position:relative;overflow:hidden;">
+            <iframe
+              src="https://www.youtube.com/embed/grszAOYAauM?rel=0&modestbranding=1&color=white"
+              title="Clip UsinerProduction"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              style="position:absolute;inset:0;width:100%;height:100%;border:none;"
+            ></iframe>
+          </div>
+          <div class="portfolio-overlay" style="pointer-events:none;">
             <span class="portfolio-tag">Clip · 2024</span>
-            <span class="portfolio-name">INTO THE DARK</span>
+            <span class="portfolio-name"> ZIP VIZUALIZER </span>
           </div>
         </div>
         <div class="portfolio-item pi-small">
@@ -830,15 +743,6 @@
           <div class="portfolio-overlay">
             <span class="portfolio-tag">Clip · 2023</span>
             <span class="portfolio-name">NUIT BLANCHE</span>
-          </div>
-        </div>
-        <div class="portfolio-item pi-large">
-          <div class="pi-thumb">
-            <iframe src="https://www.youtube.com/embed/grszAOYAauM" title="Clip musical UsinerProduction" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          </div>
-          <div class="portfolio-overlay">
-            <span class="portfolio-tag">Clip · 2025</span>
-            <span class="portfolio-name">NOUVEAU CLIP</span>
           </div>
         </div>
       </div>
@@ -927,55 +831,6 @@
     </div>
   </section>
 
-  <!-- CONTACT -->
-  <section id="contact">
-    <p class="section-label reveal">Démarrer un projet</p>
-    <h2 class="section-title reveal">CONTACT</h2>
-    <div class="section-divider reveal"></div>
-    <div class="contact-layout">
-      <div class="contact-info reveal">
-        <p>Tu as un projet en tête ? Parle-moi de ta vision. Je réponds dans les 48h pour voir comment on peut construire quelque chose ensemble.</p>
-        <div class="contact-detail">
-          <div class="contact-detail-item">
-            <span class="contact-detail-label">Email</span>
-            <a href="mailto:usinerproduction@gmail.com" class="contact-detail-value contact-link">usinerproduction@gmail.com</a>
-          </div>
-          <div class="contact-detail-item">
-            <span class="contact-detail-label">Localisation</span>
-            <span class="contact-detail-value">Marne & Ardennes — Déplacement possible</span>
-          </div>
-          <div class="contact-detail-item">
-            <span class="contact-detail-label">Instagram</span>
-            <a href="https://instagram.com/UsinerProduction" target="_blank" class="contact-detail-value contact-link">@UsinerProduction</a>
-          </div>
-          <div class="contact-detail-item">
-            <span class="contact-detail-label">Disponibilité</span>
-            <span class="contact-detail-value">Projets ouverts · 2025</span>
-          </div>
-        </div>
-      </div>
-      <div class="contact-form reveal">
-        <div class="form-group">
-          <label class="form-label">Nom</label>
-          <input type="text" class="form-input" placeholder="Votre nom" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Email</label>
-          <input type="email" class="form-input" placeholder="votre@email.com" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Type de projet</label>
-          <input type="text" class="form-input" placeholder="Clip, film d'entreprise, autre..." />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Message</label>
-          <textarea class="form-textarea" placeholder="Décris ton projet..."></textarea>
-        </div>
-        <button class="form-submit">Envoyer le message</button>
-      </div>
-    </div>
-  </section>
-
   <!-- FOOTER -->
   <footer>
     <div class="footer-left">
@@ -995,255 +850,42 @@
     </div>
   </footer>
 
-  <script src="script.js" defer></script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UsinerProduction - Trip</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --bg: #080808;
-      --bg2: #0f0f0f;
-      --accent: #e8e0d5;
-      --accent2: #a89880;
-      --text: #EFEFEF;
-      --muted: #5a5a5a;
-      --border: #1c1c1c;
-      --gold: #a89880;
-      --gold-dim: #6e6054;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-weight: 300;
-      overflow-x: hidden;
-    }
-
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.4rem 4rem;
-      background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
-      transition: background 0.3s;
-    }
-    nav.scrolled { background: rgba(10,10,10,0.97); border-bottom: 1px solid var(--border); }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-    }
-    .nav-logo-text {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.1rem;
-      letter-spacing: 0.12em;
-      color: var(--text);
-    }
-
-    /* Trip Section */
-    #trip-section {
-      padding: 6rem 4rem;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #trip-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 3rem;
-      letter-spacing: 0.1em;
-      margin-bottom: 2rem;
-      color: var(--gold);
-    }
-
-    #globe-container {
-      width: 100%;
-      max-width: 800px;
-      height: 600px;
-      margin: 2rem 0;
-      position: relative;
-    }
-
-    #video-modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.9);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
-
-    #video-modal.active {
-      display: flex;
-    }
-
-    #video-player {
-      width: 80%;
-      max-width: 800px;
-      height: auto;
-      border-radius: 8px;
-    }
-
-    #close-modal {
-      position: absolute;
-      top: 20px;
-      right: 40px;
-      color: var(--text);
-      font-size: 2rem;
-      cursor: pointer;
-    }
-
-    .country-dot {
-      position: absolute;
-      width: 12px;
-      height: 12px;
-      background-color: var(--gold);
-      border-radius: 50%;
-      cursor: pointer;
-      transform: translate(-50%, -50%);
-    }
-
-    .country-dot:hover {
-      background-color: var(--accent);
-      transform: translate(-50%, -50%) scale(1.5);
-    }
-  </style>
-</head>
-<body>
-  <nav class="nav">
-    <a href="#" class="nav-logo">
-      <span class="nav-logo-text">UsinerProduction</span>
-    </a>
-    <a href="#trip-section" class="nav-logo-text">TRIP</a>
-  </nav>
-
-  <section id="trip-section">
-    <h1 id="trip-title">VOYAGES</h1>
-    <div id="globe-container"></div>
-
-    <!-- Video Modal -->
-    <div id="video-modal">
-      <span id="close-modal">&times;</span>
-      <video id="video-player" controls>
-        <source src="" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-    </div>
-  </section>
-
   <script>
-    // Scene setup
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(window.innerWidth * 0.8, 600);
-    renderer.setClearColor(0x000000, 0);
-    document.getElementById('globe-container').appendChild(renderer.domElement);
+    // Nav scroll
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
 
-    // Controls
-    const controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.25;
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
 
-    // Globe
-    const geometry = new THREE.SphereGeometry(2, 64, 64);
-    const textureLoader = new THREE.TextureLoader();
-    const texture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_2048.jpg');
-    const material = new THREE.MeshBasicMaterial({ map: texture });
-    const globe = new THREE.Mesh(geometry, material);
-    scene.add(globe);
-
-    // Light
-    const ambientLight = new THREE.AmbientLight(0x404040);
-    scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(1, 1, 1);
-    scene.add(directionalLight);
-
-    // Camera position
-    camera.position.z = 5;
-
-    // Animation loop
-    function animate() {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
+    // Burger menu
+    function toggleMenu() {
+      document.getElementById('navLinks').classList.toggle('open');
+      document.getElementById('burger').classList.toggle('open');
     }
-    animate();
+    function closeMenu() {
+      document.getElementById('navLinks').classList.remove('open');
+      document.getElementById('burger').classList.remove('open');
+    }
 
-    // Handle window resize
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth * 0.8, 600);
-    });
-
-    // Example: Add a dot for France
-    const franceDot = document.createElement('div');
-    franceDot.className = 'country-dot';
-    franceDot.style.left = '55%';
-    franceDot.style.top = '40%';
-    document.getElementById('globe-container').appendChild(franceDot);
-
-    // Example: Add a dot for Japan
-    const japanDot = document.createElement('div');
-    japanDot.className = 'country-dot';
-    japanDot.style.left = '85%';
-    japanDot.style.top = '45%';
-    document.getElementById('globe-container').appendChild(japanDot);
-
-    // Modal logic
-    const modal = document.getElementById('video-modal');
-    const closeModal = document.getElementById('close-modal');
-    const videoPlayer = document.getElementById('video-player');
-
-    // Set video source for France
-    franceDot.addEventListener('click', () => {
-      videoPlayer.src = 'LIEN_VERS_TA_VIDÉO_FRANCE'; // Remplace par ton lien
-      modal.classList.add('active');
-    });
-
-    // Set video source for Japan
-    japanDot.addEventListener('click', () => {
-      videoPlayer.src = 'LIEN_VERS_TA_VIDÉO_JAPON'; // Remplace par ton lien
-      modal.classList.add('active');
-    });
-
-    closeModal.addEventListener('click', () => {
-      modal.classList.remove('active');
-      videoPlayer.pause();
-    });
-
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.remove('active');
-        videoPlayer.pause();
-      }
+    // Portfolio filters
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
     });
   </script>
 </body>
